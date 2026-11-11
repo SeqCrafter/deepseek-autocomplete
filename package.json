@@ -1,0 +1,231 @@
+{
+  "name": "deepseek-autocomplete",
+  "displayName": "%displayName%",
+  "description": "%description%",
+  "version": "8.15.0",
+  "categories": ["AI", "Programming Languages"],
+  "keywords": ["autocomplete", "inline-completion", "copilot-replica", "fim", "openai", "ollama"],
+  "publisher": "SmallMain",
+  "icon": "icon.png",
+  "repository": "github:smallmain/vscode-unify-chat-provider",
+  "bugs": "https://github.com/smallmain/vscode-unify-chat-provider/issues",
+  "author": "SmallMain",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.12.0",
+    "vscode": "^1.115.0"
+  },
+  "packageManager": "npm@10.8.2",
+  "enabledApiProposals": ["inlineCompletionsAdditions"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "l10n": "./l10n",
+  "contributes": {
+    "configuration": {
+      "title": "%configuration.title%",
+      "properties": {
+        "unifyChatProvider.completion.enabled": {
+          "type": "boolean",
+          "scope": "window",
+          "default": true,
+          "description": "%configuration.completion.enabled.description%",
+          "order": 1
+        },
+        "unifyChatProvider.completion.baseUrl": {
+          "type": "string",
+          "scope": "application",
+          "default": "https://api.openai.com/v1",
+          "markdownDescription": "%configuration.completion.baseUrl.description%",
+          "order": 2
+        },
+        "unifyChatProvider.completion.apiKey": {
+          "type": "string",
+          "scope": "application",
+          "ignoreSync": true,
+          "default": "",
+          "markdownDescription": "%configuration.completion.apiKey.description%",
+          "order": 3
+        },
+        "unifyChatProvider.completion.model": {
+          "type": "string",
+          "scope": "window",
+          "default": "",
+          "description": "%configuration.completion.model.description%",
+          "order": 4
+        },
+        "unifyChatProvider.completion.apiType": {
+          "type": "string",
+          "scope": "application",
+          "enum": ["completions", "chat-completions"],
+          "enumDescriptions": ["%configuration.completion.apiType.completions%", "%configuration.completion.apiType.chat-completions%"],
+          "default": "completions",
+          "description": "%configuration.completion.apiType.description%",
+          "order": 5
+        },
+        "unifyChatProvider.completion.fimTemplate": {
+          "type": "string",
+          "scope": "window",
+          "enum": ["fim", "codegemma", "qwen2.5-coder", "suffix-param"],
+          "enumDescriptions": ["%configuration.completion.fimTemplate.fim%", "%configuration.completion.fimTemplate.codegemma%", "%configuration.completion.fimTemplate.qwen%", "%configuration.completion.fimTemplate.suffix-param%"],
+          "default": "suffix-param",
+          "description": "%configuration.completion.fimTemplate.description%",
+          "order": 6
+        },
+        "unifyChatProvider.completion.maxTokens": {
+          "type": "integer",
+          "scope": "window",
+          "minimum": 1,
+          "default": 256,
+          "description": "%configuration.completion.maxTokens.description%",
+          "order": 7
+        },
+        "unifyChatProvider.completion.candidateCount": {
+          "type": "integer",
+          "scope": "window",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 1,
+          "description": "%configuration.completion.candidateCount.description%",
+          "order": 8
+        },
+        "unifyChatProvider.completion.temperature": {
+          "type": "number",
+          "scope": "window",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 0,
+          "description": "%configuration.completion.temperature.description%",
+          "order": 9
+        },
+        "unifyChatProvider.completion.timeoutMs": {
+          "type": "integer",
+          "scope": "application",
+          "minimum": 1,
+          "default": 10000,
+          "description": "%configuration.completion.timeoutMs.description%",
+          "order": 10
+        },
+        "unifyChatProvider.completion.extraHeaders": {
+          "type": "object",
+          "scope": "application",
+          "ignoreSync": true,
+          "additionalProperties": {"type": "string"},
+          "default": {},
+          "description": "%configuration.completion.extraHeaders.description%",
+          "order": 11
+        },
+        "unifyChatProvider.completion.extraBody": {
+          "type": "object",
+          "scope": "application",
+          "additionalProperties": true,
+          "default": {},
+          "description": "%configuration.completion.extraBody.description%",
+          "order": 12
+        },
+        "unifyChatProvider.completion.disabledGlobs": {
+          "type": "array",
+          "scope": "window",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true,
+          "default": [],
+          "description": "%configuration.completion.disabledGlobs.description%",
+          "order": 13
+        },
+        "unifyChatProvider.completion.enabledLanguages": {
+          "type": "object",
+          "scope": "window",
+          "additionalProperties": {"type": "boolean"},
+          "default": {"*": true},
+          "description": "%configuration.completion.enabledLanguages.description%",
+          "order": 14
+        },
+        "unifyChatProvider.completion.respectSelectedCompletionInfo": {
+          "type": "boolean",
+          "scope": "window",
+          "default": true,
+          "description": "%configuration.completion.respectSelectedCompletionInfo.description%",
+          "order": 15
+        },
+        "unifyChatProvider.completion.nes.enabled": {
+          "type": "boolean",
+          "scope": "window",
+          "default": false,
+          "markdownDescription": "%configuration.completion.nes.enabled.description%",
+          "order": 20
+        },
+        "unifyChatProvider.completion.nes.model": {
+          "type": "string",
+          "scope": "window",
+          "default": "",
+          "description": "%configuration.completion.nes.model.description%",
+          "order": 21
+        },
+        "unifyChatProvider.completion.nes.maxTokens": {
+          "type": "integer",
+          "scope": "window",
+          "minimum": 1,
+          "default": 4096,
+          "description": "%configuration.completion.nes.maxTokens.description%",
+          "order": 22
+        },
+        "unifyChatProvider.completion.nes.cursorPrediction": {
+          "type": "boolean",
+          "scope": "window",
+          "default": false,
+          "description": "%configuration.completion.nes.cursorPrediction.description%",
+          "order": 23
+        },
+        "unifyChatProvider.completion.nes.eagerness": {
+          "type": "string",
+          "scope": "window",
+          "enum": ["auto", "low", "medium", "high"],
+          "default": "auto",
+          "description": "%configuration.completion.nes.eagerness.description%",
+          "order": 24
+        },
+        "unifyChatProvider.completion.nes.strategy": {
+          "type": "string",
+          "scope": "window",
+          "enum": ["copilotNesXtab", "xtab275", "xtabAggressiveness", "xtab275Aggressiveness", "xtab275AggressivenessHighLow", "xtab275EditIntent", "xtab275EditIntentShort"],
+          "default": "copilotNesXtab",
+          "description": "%configuration.completion.nes.strategy.description%",
+          "order": 25
+        },
+        "unifyChatProvider.verbose": {
+          "type": "boolean",
+          "scope": "application",
+          "default": false,
+          "description": "%configuration.verbose.description%",
+          "order": 30
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "clean:build": "tsx scripts/clean-build.ts",
+    "compile": "npm run clean:build && tsc -p . && npm run build:chat-lib-runtime",
+    "watch": "npm run clean:build && npm run build:chat-lib-runtime && tsc -watch -p .",
+    "build:chat-lib-runtime": "tsx scripts/copy-chat-lib-resources.ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/vscode": "1.115.0",
+    "@vscode/tree-sitter-wasm": "0.0.5-php.2",
+    "@vscode/vsce": "4.1.0",
+    "esbuild": "0.28.1",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3",
+    "web-tree-sitter": "0.23.2"
+  },
+  "overrides": {
+    "@vscode/vsce": {"minimatch": "$minimatch"}
+  },
+  "dependencies": {
+    "ignore": "7.0.6",
+    "minimatch": "^11.0.5",
+    "tiktoken": "^1.0.22",
+    "undici": "^7.30.1"
+  }
+}
