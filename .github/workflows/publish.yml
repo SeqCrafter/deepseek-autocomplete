@@ -35,7 +35,7 @@ jobs:
         run: npx --yes @vscode/vsce@latest package -o extension.vsix
 
       - name: Publish to Marketplace
-        run: npx --yes @vscode/vsce@latest publish --packagePath extension.vsix --skip-duplicate
+        run: npx --yes @vscode/vsce@latest publish --packagePath extension.vsix --skip-duplicate --oidc
 
       - uses: actions/upload-artifact@v4
         with:
