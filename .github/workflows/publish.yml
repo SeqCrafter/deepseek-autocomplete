@@ -3,12 +3,12 @@ name: Publish VS Code Extension
 on:
   push:
     tags:
-      - 'v*'          # 打 tag 触发，例如 v1.2.3
-  workflow_dispatch:   # 方便手动测试
+      - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: read
-  id-token: write      # ← Trusted Publishing 的关键
+  id-token: write
 
 jobs:
   publish:
@@ -24,7 +24,6 @@ jobs:
 
       - run: npm ci
 
-      # 可选：把 tag 上的版本号写进 package.json，避免忘记改版本
       - name: Sync version from tag
         if: startsWith(github.ref, 'refs/tags/v')
         run: npm version --no-git-tag-version "${GITHUB_REF_NAME#v}"
@@ -33,10 +32,10 @@ jobs:
       - run: npm run test --if-present
 
       - name: Package
-        run: npx --yes @vscode/vsce@latest package -o extension.vsix
+        run: npx --yes @vscode/vsce@latest package --allow-proposed-apis inlineCompletionsAdditions -o extension.vsix
 
       - name: Publish to Marketplace
-        run: npx --yes @vscode/vsce@latest publish --packagePath extension.vsix --skip-duplicate
+        run: npx --yes @vscode/vsce@latest publish --packagePath extension.vsix --skip-duplicate --allow-proposed-apis inlineCompletionsAdditions
 
       - uses: actions/upload-artifact@v4
         with:
