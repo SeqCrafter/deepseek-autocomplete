@@ -5,7 +5,7 @@ import { readCompletionConnectionSettings } from './vscode-configuration';
 
 export class CompletionStatusBar implements vscode.Disposable {
   private readonly item = vscode.window.createStatusBarItem(
-    'unifyChatProvider.completion',
+    'deepseekAutocomplete.completion',
     vscode.StatusBarAlignment.Right,
     100,
   );

@@ -24,21 +24,21 @@
     "configuration": {
       "title": "%configuration.title%",
       "properties": {
-        "unifyChatProvider.completion.enabled": {
+        "deepseekAutocomplete.completion.enabled": {
           "type": "boolean",
           "scope": "window",
           "default": true,
           "description": "%configuration.completion.enabled.description%",
           "order": 1
         },
-        "unifyChatProvider.completion.baseUrl": {
+        "deepseekAutocomplete.completion.baseUrl": {
           "type": "string",
           "scope": "application",
           "default": "https://api.openai.com/v1",
           "markdownDescription": "%configuration.completion.baseUrl.description%",
           "order": 2
         },
-        "unifyChatProvider.completion.apiKey": {
+        "deepseekAutocomplete.completion.apiKey": {
           "type": "string",
           "scope": "application",
           "ignoreSync": true,
@@ -46,14 +46,14 @@
           "markdownDescription": "%configuration.completion.apiKey.description%",
           "order": 3
         },
-        "unifyChatProvider.completion.model": {
+        "deepseekAutocomplete.completion.model": {
           "type": "string",
           "scope": "window",
           "default": "",
           "description": "%configuration.completion.model.description%",
           "order": 4
         },
-        "unifyChatProvider.completion.apiType": {
+        "deepseekAutocomplete.completion.apiType": {
           "type": "string",
           "scope": "application",
           "enum": ["completions", "chat-completions"],
@@ -62,7 +62,7 @@
           "description": "%configuration.completion.apiType.description%",
           "order": 5
         },
-        "unifyChatProvider.completion.fimTemplate": {
+        "deepseekAutocomplete.completion.fimTemplate": {
           "type": "string",
           "scope": "window",
           "enum": ["fim", "codegemma", "qwen2.5-coder", "suffix-param"],
@@ -71,7 +71,7 @@
           "description": "%configuration.completion.fimTemplate.description%",
           "order": 6
         },
-        "unifyChatProvider.completion.maxTokens": {
+        "deepseekAutocomplete.completion.maxTokens": {
           "type": "integer",
           "scope": "window",
           "minimum": 1,
@@ -79,7 +79,7 @@
           "description": "%configuration.completion.maxTokens.description%",
           "order": 7
         },
-        "unifyChatProvider.completion.candidateCount": {
+        "deepseekAutocomplete.completion.candidateCount": {
           "type": "integer",
           "scope": "window",
           "minimum": 1,
@@ -88,7 +88,7 @@
           "description": "%configuration.completion.candidateCount.description%",
           "order": 8
         },
-        "unifyChatProvider.completion.temperature": {
+        "deepseekAutocomplete.completion.temperature": {
           "type": "number",
           "scope": "window",
           "minimum": 0,
@@ -97,7 +97,7 @@
           "description": "%configuration.completion.temperature.description%",
           "order": 9
         },
-        "unifyChatProvider.completion.timeoutMs": {
+        "deepseekAutocomplete.completion.timeoutMs": {
           "type": "integer",
           "scope": "application",
           "minimum": 1,
@@ -105,7 +105,7 @@
           "description": "%configuration.completion.timeoutMs.description%",
           "order": 10
         },
-        "unifyChatProvider.completion.extraHeaders": {
+        "deepseekAutocomplete.completion.extraHeaders": {
           "type": "object",
           "scope": "application",
           "ignoreSync": true,
@@ -114,7 +114,7 @@
           "description": "%configuration.completion.extraHeaders.description%",
           "order": 11
         },
-        "unifyChatProvider.completion.extraBody": {
+        "deepseekAutocomplete.completion.extraBody": {
           "type": "object",
           "scope": "application",
           "additionalProperties": true,
@@ -122,7 +122,7 @@
           "description": "%configuration.completion.extraBody.description%",
           "order": 12
         },
-        "unifyChatProvider.completion.disabledGlobs": {
+        "deepseekAutocomplete.completion.disabledGlobs": {
           "type": "array",
           "scope": "window",
           "items": {"type": "string", "minLength": 1},
@@ -131,7 +131,7 @@
           "description": "%configuration.completion.disabledGlobs.description%",
           "order": 13
         },
-        "unifyChatProvider.completion.enabledLanguages": {
+        "deepseekAutocomplete.completion.enabledLanguages": {
           "type": "object",
           "scope": "window",
           "additionalProperties": {"type": "boolean"},
@@ -139,28 +139,28 @@
           "description": "%configuration.completion.enabledLanguages.description%",
           "order": 14
         },
-        "unifyChatProvider.completion.respectSelectedCompletionInfo": {
+        "deepseekAutocomplete.completion.respectSelectedCompletionInfo": {
           "type": "boolean",
           "scope": "window",
           "default": true,
           "description": "%configuration.completion.respectSelectedCompletionInfo.description%",
           "order": 15
         },
-        "unifyChatProvider.completion.nes.enabled": {
+        "deepseekAutocomplete.completion.nes.enabled": {
           "type": "boolean",
           "scope": "window",
           "default": false,
           "markdownDescription": "%configuration.completion.nes.enabled.description%",
           "order": 20
         },
-        "unifyChatProvider.completion.nes.model": {
+        "deepseekAutocomplete.completion.nes.model": {
           "type": "string",
           "scope": "window",
           "default": "",
           "description": "%configuration.completion.nes.model.description%",
           "order": 21
         },
-        "unifyChatProvider.completion.nes.maxTokens": {
+        "deepseekAutocomplete.completion.nes.maxTokens": {
           "type": "integer",
           "scope": "window",
           "minimum": 1,
@@ -168,14 +168,14 @@
           "description": "%configuration.completion.nes.maxTokens.description%",
           "order": 22
         },
-        "unifyChatProvider.completion.nes.cursorPrediction": {
+        "deepseekAutocomplete.completion.nes.cursorPrediction": {
           "type": "boolean",
           "scope": "window",
           "default": false,
           "description": "%configuration.completion.nes.cursorPrediction.description%",
           "order": 23
         },
-        "unifyChatProvider.completion.nes.eagerness": {
+        "deepseekAutocomplete.completion.nes.eagerness": {
           "type": "string",
           "scope": "window",
           "enum": ["auto", "low", "medium", "high"],
@@ -183,7 +183,7 @@
           "description": "%configuration.completion.nes.eagerness.description%",
           "order": 24
         },
-        "unifyChatProvider.completion.nes.strategy": {
+        "deepseekAutocomplete.completion.nes.strategy": {
           "type": "string",
           "scope": "window",
           "enum": ["copilotNesXtab", "xtab275", "xtabAggressiveness", "xtab275Aggressiveness", "xtab275AggressivenessHighLow", "xtab275EditIntent", "xtab275EditIntentShort"],
@@ -191,7 +191,7 @@
           "description": "%configuration.completion.nes.strategy.description%",
           "order": 25
         },
-        "unifyChatProvider.verbose": {
+        "deepseekAutocomplete.verbose": {
           "type": "boolean",
           "scope": "application",
           "default": false,

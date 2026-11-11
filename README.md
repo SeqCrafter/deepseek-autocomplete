@@ -23,7 +23,7 @@ An empty model sends no requests. An empty API key is allowed for anonymous loca
 
 ## Settings
 
-All completion settings use the prefix `unifyChatProvider.completion`.
+All completion settings use the prefix `deepseekAutocomplete.completion`.
 
 | Setting | Purpose |
 | --- | --- |

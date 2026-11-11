@@ -7,7 +7,7 @@ import type { CompletionConfigurationResult } from './configuration';
 import { mergeCompletionDisabledGlobs } from './disabled-globs';
 import { INTERNAL_COMPLETION_VENDOR } from './types';
 
-export const COMPLETION_CONFIGURATION_SECTION = 'unifyChatProvider.completion';
+export const COMPLETION_CONFIGURATION_SECTION = 'deepseekAutocomplete.completion';
 
 export type CompletionApiType = 'completions' | 'chat-completions';
 export type CompletionFimTemplate = 'fim' | 'codegemma' | 'qwen2.5-coder' | 'suffix-param';

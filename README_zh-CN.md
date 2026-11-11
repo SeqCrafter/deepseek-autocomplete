@@ -23,7 +23,7 @@
 
 ## 设置项
 
-自动补全设置的统一前缀为 `unifyChatProvider.completion`。
+自动补全设置的统一前缀为 `deepseekAutocomplete.completion`。
 
 | 设置 | 用途 |
 | --- | --- |
@@ -58,9 +58,7 @@ GitHub Copilot 保持独立，多个提供器的建议由 VS Code 正常处理�
 
 ```sh
 npm install
-npm run compile
-npm run test:unit
-npm run test:e2e
+npm run package   # compiles and produces a .vsix
 ```
 
 单元测试使用 Vitest，Extension Host 测试使用 `@vscode/test-electron`、本机已安装的 VS Code、隔离用户目录和本地模拟 API。测试不会下载、安装或复制 VS Code。自动发现不足时，可将 `VSCODE_EXECUTABLE_PATH` 指向已有可执行文件或 macOS `.app`。

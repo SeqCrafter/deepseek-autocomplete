@@ -14,7 +14,7 @@ export function disposeLogger(): void {
 
 export const authLog = {
   verbose(context: string, message: string): void {
-    if (vscode.workspace.getConfiguration('unifyChatProvider').get<boolean>('verbose', false)) {
+    if (vscode.workspace.getConfiguration('deepseekAutocomplete').get<boolean>('verbose', false)) {
       getChannel().debug(`[${context}] ${message}`);
     }
   },
