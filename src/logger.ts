@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 let channel: vscode.LogOutputChannel | undefined;
 
 function getChannel(): vscode.LogOutputChannel {
-  channel ??= vscode.window.createOutputChannel('DeepSeek Autocomplete', { log: true });
+  channel ??= vscode.window.createOutputChannel('Dspilot', { log: true });
   return channel;
 }
 

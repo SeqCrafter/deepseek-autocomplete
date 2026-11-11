@@ -19,7 +19,7 @@ export class CompletionStatusBar implements vscode.Disposable {
       title: t('Open Autocomplete Settings'),
       arguments: [`@ext:${extensionId}`],
     };
-    this.item.name = 'DeepSeek Autocomplete';
+    this.item.name = 'Dspilot';
     this.item.command = this.command;
     this.subscription = manager.onDidChangeState(() => this.update());
     this.update();
@@ -55,7 +55,7 @@ export class CompletionStatusBar implements vscode.Disposable {
       tooltip += '\n' + t('Next-edit suggestions require the inlineCompletionsAdditions Proposed API; ordinary autocomplete remains available.');
     }
     // Icon-only item: sparkle = ready, circle-slash = disabled, alert = misconfigured, spinner = generating.
-    this.state = { text: `$(${icon})`, tooltip: `DeepSeek Autocomplete\n${tooltip}` };
+    this.state = { text: `$(${icon})`, tooltip: `Dspilot\n${tooltip}` };
     this.item.text = this.state.text;
     this.item.tooltip = this.state.tooltip;
   }

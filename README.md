@@ -1,4 +1,4 @@
-# DeepSeek Autocomplete
+# Dspilot
 
 [English](./README.md) | [Simplified Chinese](./README_zh-CN.md)
 

@@ -1,7 +1,7 @@
 {
-  "displayName": "DeepSeek Autocomplete",
+  "displayName": "Dspilot",
   "description": "Copilot-replica inline autocomplete using your own API endpoint, configured entirely in VS Code Settings. Works alongside GitHub Copilot.",
-  "configuration.title": "DeepSeek Autocomplete",
+  "configuration.title": "Dspilot",
   "configuration.completion.enabled.description": "Enable copilot-replica inline autocomplete. A model must be configured before requests are sent. GitHub Copilot is not disabled.",
   "configuration.completion.baseUrl.description": "OpenAI-compatible API base URL, including any `/v1` prefix. Examples: `https://api.openai.com/v1` or `http://localhost:11434/v1`. The plugin appends `/completions` or `/chat/completions` automatically. Configure in User Settings only.",
   "configuration.completion.apiKey.description": "API key for the completion endpoint. Leave blank for anonymous local APIs. **Stored in plain text in User Settings and excluded from Settings Sync.** Never put a real key in workspace files or source control.",

@@ -33,7 +33,7 @@ const INLINE_COMPLETION_SELECTOR: vscode.DocumentSelector = [
 function createInlineCompletionMetadata(): vscode.InlineCompletionItemProviderMetadata {
   return {
     groupId: "unify-chat-provider",
-    displayName: "DeepSeek Autocomplete",
+    displayName: "Dspilot",
   };
 }
 
