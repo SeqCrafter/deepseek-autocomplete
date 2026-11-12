@@ -24,6 +24,8 @@ import {
 import { authLog } from "../../logger";
 import { t } from "../../i18n";
 import { LinkedCancellationTokenSource } from "../cancellation";
+import { usageStats } from "../stats";
+import { readCompletionConnectionSettings } from "../vscode-configuration";
 import { readRoutedCompletionChange } from "../change-hint";
 import type {
   CompletionAlgorithm,
@@ -170,7 +172,7 @@ function normalizeInsertSpaces(
 
 function isPreReleaseBuild(): boolean {
   const packageJson: unknown = vscode.extensions.getExtension(
-    "SmallMain.deepseek-autocomplete",
+    "XiaoHanys.deepseek-autocomplete",
   )?.packageJSON;
   if (typeof packageJson !== "object" || packageJson === null) {
     return false;
@@ -667,6 +669,12 @@ export class CopilotRuntime implements CompletionAlgorithm {
       const engine = createFimGhostTextEngine(model, {
         behavior: {
           cyclingCandidateCount: this.options.n,
+        },
+        requestDebounceMs: () =>
+          readCompletionConnectionSettings().configuration.debounceMs,
+        onSavedRequest: (reason) => {
+          if (reason === "cache") usageStats.recordCacheHit();
+          else usageStats.recordDebounced();
         },
       });
       const isCurrent = generation === this.fimModelGeneration;

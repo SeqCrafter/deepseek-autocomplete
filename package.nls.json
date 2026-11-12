@@ -29,5 +29,6 @@
   "configuration.completion.fimTemplate.fim": "Generic <|fim_prefix|> tokens inside the prompt",
   "configuration.completion.fimTemplate.codegemma": "CodeGemma format",
   "configuration.completion.fimTemplate.qwen": "Qwen2.5-Coder format",
-  "configuration.completion.fimTemplate.suffix-param": "Native `prompt` + `suffix` request fields (DeepSeek /beta, OpenAI-style FIM). Only with API type `completions`."
+  "configuration.completion.fimTemplate.suffix-param": "Native `prompt` + `suffix` request fields (DeepSeek /beta, OpenAI-style FIM). Only with API type `completions`.",
+  "configuration.completion.debounceMs.description": "Quiet period in milliseconds to wait after typing before sending an automatic request. Requests cancelled during this window are never sent. Set 0 to disable. Cache hits and manual triggers are not delayed."
 }

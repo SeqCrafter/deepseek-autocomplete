@@ -23,6 +23,7 @@ export interface CompletionConnectionSettings {
   readonly candidateCount: number;
   readonly temperature: number;
   readonly timeoutMs: number;
+  readonly debounceMs: number;
   readonly extraHeaders: Readonly<Record<string, string>>;
   readonly extraBody: Readonly<Record<string, unknown>>;
   readonly disabledGlobs: readonly string[];
@@ -207,6 +208,10 @@ export function normalizeCompletionConnectionSettings(
         ? Math.min(2, Math.max(0, raw.temperature))
         : 0,
     timeoutMs: readPositiveInteger(raw.timeoutMs, 10_000, 2_147_483_647),
+    debounceMs:
+      typeof raw.debounceMs === 'number' && Number.isFinite(raw.debounceMs)
+        ? Math.min(5_000, Math.max(0, Math.round(raw.debounceMs)))
+        : 150,
     extraHeaders,
     extraBody,
     disabledGlobs: mergeCompletionDisabledGlobs(
@@ -265,6 +270,7 @@ export function readCompletionConnectionSettings(): CompletionConnectionSettings
         'candidateCount',
         'temperature',
         'timeoutMs',
+        'debounceMs',
         'extraHeaders',
         'extraBody',
         'disabledGlobs',

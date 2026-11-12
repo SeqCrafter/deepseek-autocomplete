@@ -2,7 +2,7 @@
   "name": "deepseek-autocomplete",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "categories": ["AI", "Programming Languages"],
   "keywords": ["autocomplete", "inline-completion", "copilot-replica", "fim", "openai", "ollama"],
   "publisher": "XiaoHanys",
@@ -105,6 +105,15 @@
           "description": "%configuration.completion.timeoutMs.description%",
           "order": 10
         },
+        "deepseekAutocomplete.completion.debounceMs": {
+          "type": "integer",
+          "scope": "window",
+          "minimum": 0,
+          "maximum": 5000,
+          "default": 150,
+          "description": "%configuration.completion.debounceMs.description%",
+          "order": 11
+        },
         "deepseekAutocomplete.completion.extraHeaders": {
           "type": "object",
           "scope": "application",
@@ -112,7 +121,7 @@
           "additionalProperties": {"type": "string"},
           "default": {},
           "description": "%configuration.completion.extraHeaders.description%",
-          "order": 11
+          "order": 12
         },
         "deepseekAutocomplete.completion.extraBody": {
           "type": "object",
@@ -120,7 +129,7 @@
           "additionalProperties": true,
           "default": {},
           "description": "%configuration.completion.extraBody.description%",
-          "order": 12
+          "order": 13
         },
         "deepseekAutocomplete.completion.disabledGlobs": {
           "type": "array",
@@ -129,7 +138,7 @@
           "uniqueItems": true,
           "default": [],
           "description": "%configuration.completion.disabledGlobs.description%",
-          "order": 13
+          "order": 14
         },
         "deepseekAutocomplete.completion.enabledLanguages": {
           "type": "object",
@@ -137,14 +146,14 @@
           "additionalProperties": {"type": "boolean"},
           "default": {"*": true},
           "description": "%configuration.completion.enabledLanguages.description%",
-          "order": 14
+          "order": 15
         },
         "deepseekAutocomplete.completion.respectSelectedCompletionInfo": {
           "type": "boolean",
           "scope": "window",
           "default": true,
           "description": "%configuration.completion.respectSelectedCompletionInfo.description%",
-          "order": 15
+          "order": 16
         },
         "deepseekAutocomplete.completion.nes.enabled": {
           "type": "boolean",

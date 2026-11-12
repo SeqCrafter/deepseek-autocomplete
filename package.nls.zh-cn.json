@@ -29,5 +29,6 @@
   "configuration.completion.fimTemplate.fim": "通用 <|fim_prefix|> 标记提示词",
   "configuration.completion.fimTemplate.codegemma": "CodeGemma 格式",
   "configuration.completion.fimTemplate.qwen": "Qwen2.5-Coder 格式",
-  "configuration.completion.fimTemplate.suffix-param": "原生 `prompt` + `suffix` 请求字段（DeepSeek /beta、OpenAI 风格 FIM），仅适用于 API 类型 `completions`。"
+  "configuration.completion.fimTemplate.suffix-param": "原生 `prompt` + `suffix` 请求字段（DeepSeek /beta、OpenAI 风格 FIM），仅适用于 API 类型 `completions`。",
+  "configuration.completion.debounceMs.description": "自动补全在停止输入后等待多少毫秒才发送请求；等待期间继续输入则不会发出请求。设为 0 可关闭。缓存命中和手动触发不受影响。"
 }

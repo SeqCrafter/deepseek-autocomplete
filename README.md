@@ -1,64 +1,84 @@
 # Dspilot
 
-[English](./README.md) | [Simplified Chinese](./README_zh-CN.md)
+[English](./README.md) | [简体中文](./README_zh-CN.md)
 
-This working copy is an autocomplete-only version of Unify Chat Provider. It keeps the `copilot-replica` algorithm and its GhostText/FIM context, caching, cancellation, notebook support and optional next-edit suggestions.
+AI inline code completion for VS Code, powered by **DeepSeek** or any other OpenAI-compatible model. Requests go straight to the endpoint you configure. GitHub Copilot is not required.
 
-- No chat model registration, provider management, OAuth login, balance monitoring, import/export or commit-message generation.
-- No commands or QuickPick forms for configuration. All settings are in the VS Code extension Settings page.
-- No disabling or excluding GitHub Copilot, changing its default models, or altering other extensions' settings.
-- API requests go directly to the endpoint you configure. GitHub Copilot does not need to be installed or signed in.
+## Features
 
-## Configure
+- **Inline completion (FIM)**: context-aware ghost text from the code before and after the cursor, similar files and recent edits, with single-line and multi-line suggestions.
+- **Fewer wasted requests**: debounced requests, cancellation of stale requests, and a local cache that serves repeated or already-typed suggestions without calling the API.
+- **Next-edit suggestions (optional)**: predicts your next edit. Requires VS Code's `inlineCompletionsAdditions` proposed API.
+- **Usage statistics**: hover the status bar icon (bottom right) to see requests sent, cache hits, requests saved by debounce, and token usage for the current session.
+- **Safe by default**: sensitive files such as `.env`, private keys and certificates are always excluded.
 
-1. Open VS Code Settings and search for `@ext:SmallMain.deepseek-autocomplete`, or click the **Autocomplete** item at the bottom right.
-2. Fill in **Completion: Base Url**, **Completion: Api Key**, and **Completion: Model**.
-3. Choose **Completion: Api Type** and, for native FIM models, **Completion: Fim Template**.
+## Quick Start
 
-The base URL includes the API prefix, for example `https://api.openai.com/v1`, `http://localhost:11434/v1` for Ollama's OpenAI-compatible API, or your vLLM server's `/v1` URL. The plugin appends `/completions` or `/chat/completions` automatically. Do not include those endpoint suffixes in the base URL.
+1. Open Settings and search for `@ext:XiaoHanys.deepseek-autocomplete`, or click the status bar icon at the bottom right.
+2. Set **Base Url**, **Api Key** and **Model**.
+3. Start typing in any file. Suggestions appear as ghost text; press `Tab` to accept.
 
-`completions` uses native FIM prompts and requires a code-completion model. `chat-completions` adapts a chat model to code completion. `fim`, `codegemma` and `qwen2.5-coder` are prompt templates within the same `copilot-replica` algorithm, not alternate algorithms.
+Example for DeepSeek:
 
-An empty model sends no requests. An empty API key is allowed for anonymous local servers. Changes take effect without reloading VS Code; endpoint, key, model and template changes retire the old runtime and its cached results.
+```json
+{
+  "deepseekAutocomplete.completion.baseUrl": "https://api.deepseek.com/beta",
+  "deepseekAutocomplete.completion.apiKey": "sk-...",
+  "deepseekAutocomplete.completion.model": "deepseek-chat"
+}
+```
+
+### Using other models
+
+Any OpenAI-compatible service works: OpenAI, Ollama (`http://localhost:11434/v1`), vLLM, LM Studio, OpenRouter and so on.
+
+- Native code-completion models (for example Qwen Coder base models): set `apiType` to `completions` and pick the matching `fimTemplate`.
+- Chat models: set `apiType` to `chat-completions`.
+- The base URL includes the version prefix (such as `/v1`); `/completions` or `/chat/completions` is appended automatically.
+- Leave `apiKey` empty for anonymous local servers. An empty `model` sends no requests.
 
 ## Settings
 
-All completion settings use the prefix `deepseekAutocomplete.completion`.
+All settings use the prefix `deepseekAutocomplete.completion.` and take effect without reloading VS Code.
 
-| Setting | Purpose |
-| --- | --- |
-| `enabled` | Enable or disable this plugin's autocomplete only. |
-| `baseUrl`, `apiKey`, `model`, `apiType` | API connection and model. |
-| `fimTemplate` | Model-specific FIM prompt format. |
-| `maxTokens`, `candidateCount`, `temperature` | Output size, explicit suggestion cycling and sampling. |
-| `timeoutMs` | Maximum request duration, including streamed responses. |
-| `extraHeaders`, `extraBody` | Custom API parameters; header values support `${APIKEY}`. |
-| `disabledGlobs`, `enabledLanguages` | File and language exclusions. |
-| `respectSelectedCompletionInfo` | Account for the selected IntelliSense suggestion. |
-| `nes.enabled`, `nes.model`, `nes.maxTokens` | Optional next-edit suggestions and model; empty NES model uses the FIM model. |
-| `nes.cursorPrediction`, `nes.eagerness`, `nes.strategy` | Optional cursor prediction, aggressiveness and next-edit prompt format. |
+| Setting | Default | Description |
+| --- | --- | --- |
+| `enabled` | `true` | Turn autocomplete on or off. |
+| `baseUrl` | `https://api.openai.com/v1` | OpenAI-compatible API base URL. |
+| `apiKey` | empty | API key. Stored in plain text in User Settings; never commit it. |
+| `model` | empty | Model ID. |
+| `apiType` | `completions` | `completions` or `chat-completions`. |
+| `fimTemplate` | `suffix-param` | FIM prompt format: `suffix-param`, `fim`, `codegemma`, `qwen2.5-coder`. |
+| `maxTokens` | `256` | Maximum output tokens per request. |
+| `candidateCount` | `1` | Number of candidates when cycling suggestions. |
+| `temperature` | `0` | Sampling temperature. |
+| `timeoutMs` | `10000` | Maximum request duration in milliseconds. |
+| `debounceMs` | `150` | Wait after typing before sending a request; `0` disables it. |
+| `extraHeaders` | `{}` | Extra HTTP headers; `${APIKEY}` is replaced with your key. |
+| `extraBody` | `{}` | Extra fields merged into the request body. |
+| `disabledGlobs` | `[]` | File patterns where autocomplete is off. |
+| `enabledLanguages` | `{"*": true}` | Per-language switch, for example `{"markdown": false}`. |
+| `respectSelectedCompletionInfo` | `true` | Account for the selected IntelliSense item. |
+| `nes.enabled` | `false` | Enable next-edit suggestions. |
+| `nes.model` | empty | Model for next edits; empty uses `model`. |
+| `nes.maxTokens` | `4096` | Maximum output tokens for next edits. |
+| `nes.cursorPrediction` | `false` | Predict where the cursor should go next. |
+| `nes.eagerness` | `auto` | `auto`, `low`, `medium` or `high`. |
+| `nes.strategy` | `copilotNesXtab` | Next-edit prompt format. |
 
-Connection settings are user-scoped so a workspace cannot redirect requests containing your API key. The key and extra headers are excluded from Settings Sync, but they are stored **in plain text** in User Settings. Do not commit real keys to source control.
-
-Built-in sensitive-file exclusions, including `.env`, private keys and certificates, always remain active. Additional `disabledGlobs` are merged with those protections. Files filtered by ignore rules are also omitted from replica context.
+Connection settings (`baseUrl`, `apiKey`, `timeoutMs`, `extraHeaders`, `extraBody`) are user-level only, so a workspace cannot redirect requests that carry your key. `apiKey` and `extraHeaders` are excluded from Settings Sync.
 
 ## Status Bar
 
-The bottom-right **Autocomplete** item uses the same built-in status icons as Continue's autocomplete: enabled, disabled and loading, plus an alert for missing or invalid configuration. Clicking it opens this extension's Settings page, not a command-based configuration dialog.
+The icon at the bottom right shows the state: ready, disabled, misconfigured or generating. Hover it for this session's statistics. Token counts appear only when the API reports `usage`; streamed responses usually omit it unless your server supports `stream_options` (you can add it through `extraBody`).
 
-GitHub Copilot remains independent. VS Code handles suggestions from multiple providers normally; this plugin contributes no exclusion or yielding metadata.
+## Requirements
 
-## VS Code Compatibility
-
-Requires VS Code 1.115.0 or later. Normal FIM autocomplete works using the stable inline completion API. Optional NES requires `inlineCompletionsAdditions`; when unavailable, FIM remains enabled and NES is not started. The plugin never modifies VS Code application files or Proposed API grants.
-
-Old provider-list and command-based settings are no longer read. Enter the desired endpoint, key and model in the new Settings page. Existing user settings and stored secrets are not automatically rewritten or removed.
+VS Code 1.115.0 or later. Regular completion uses stable APIs only; next-edit suggestions need the `inlineCompletionsAdditions` proposed API and are skipped when it is unavailable.
 
 ## Development
 
 ```sh
 npm install
-npm run package   # compiles and produces a .vsix
+npm run package   # compile and build a .vsix
 ```
-
-`src/chat-lib` is retained because it contains the replica's completion engines and extracted parser/diff infrastructure, not a chat feature. `npm run compile` packages its required parser, diff and WASM resources. Unit and E2E tests have been removed from this working copy.

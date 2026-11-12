@@ -284,6 +284,10 @@ export interface GhostTextEngineDependencies {
   behavior?: Partial<Omit<GhostTextBehavior, 'upstreamCommit'>>;
   idFactory?: () => string;
   clock?: GhostTextClock;
+  /** Returns the quiet period (ms) to wait before sending an automatic request. */
+  requestDebounceMs?: () => number;
+  /** Observer for request-saving events; used for usage statistics only. */
+  onSavedRequest?: (reason: 'cache' | 'debounced') => void;
 }
 
 export interface GhostTextDebugState {

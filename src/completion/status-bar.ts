@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { t } from '../i18n';
 import type { CompletionManager } from './manager';
+import { usageStats } from './stats';
 import { readCompletionConnectionSettings } from './vscode-configuration';
 
 export class CompletionStatusBar implements vscode.Disposable {
@@ -21,7 +22,10 @@ export class CompletionStatusBar implements vscode.Disposable {
     };
     this.item.name = 'Dspilot';
     this.item.command = this.command;
-    this.subscription = manager.onDidChangeState(() => this.update());
+    this.subscription = vscode.Disposable.from(
+      manager.onDidChangeState(() => this.update()),
+      usageStats.onDidChange(() => this.update()),
+    );
     this.update();
     this.item.show();
   }
@@ -39,24 +43,30 @@ export class CompletionStatusBar implements vscode.Disposable {
     const settings = readCompletionConnectionSettings();
     const manager = this.manager.getState();
     let icon = 'sparkle';
-    let tooltip = t('Autocomplete ({0})\nAlgorithm: copilot-replica\nClick to open extension settings.', settings.configuration.model);
     if (!manager.enabled) {
       icon = 'circle-slash';
-      tooltip = t('Autocomplete is disabled. Click to open extension settings.');
     } else if (settings.status !== 'ready') {
       icon = 'alert';
-      tooltip = settings.status === 'invalid'
-        ? t('Autocomplete configuration is invalid: {0}', settings.error ?? '')
-        : t('Set an API base URL and model in the extension settings to enable autocomplete.');
     } else if (manager.busy) {
       icon = 'loading~spin';
-      tooltip = t('Generating an autocomplete suggestion...');
-    } else if (settings.configuration.nes.enabled && !manager.nextEditAvailable) {
-      tooltip += '\n' + t('Next-edit suggestions require the inlineCompletionsAdditions Proposed API; ordinary autocomplete remains available.');
     }
     // Icon-only item: sparkle = ready, circle-slash = disabled, alert = misconfigured, spinner = generating.
-    this.state = { text: `$(${icon})`, tooltip: `Dspilot\n${tooltip}` };
+    // The tooltip only shows this session's usage statistics.
+    this.state = { text: `$(${icon})`, tooltip: this.formatStats() };
     this.item.text = this.state.text;
     this.item.tooltip = this.state.tooltip;
+  }
+
+  private formatStats(): string {
+    const stats = usageStats.getSnapshot();
+    const format = (value: number) => value.toLocaleString();
+    return [
+      t('Dspilot usage (this session)'),
+      t('Requests sent: {0}', format(stats.requests)),
+      t('Cache hits: {0}', format(stats.cacheHits)),
+      t('Requests saved by debounce: {0}', format(stats.debounced)),
+      t('Prompt tokens: {0}', format(stats.promptTokens)),
+      t('Completion tokens: {0}', format(stats.completionTokens)),
+    ].join('\n');
   }
 }

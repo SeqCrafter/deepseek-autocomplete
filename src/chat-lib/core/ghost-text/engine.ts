@@ -319,7 +319,18 @@ export class GhostTextEngine {
 
     const needsNetwork =
       !local || (request.trigger === 'invoke' && choices.length <= 1);
+    if (!needsNetwork && !speculative) {
+      this.dependencies.onSavedRequest?.('cache');
+    }
     if (needsNetwork) {
+      const debounceMs = this.dependencies.requestDebounceMs?.() ?? 0;
+      if (debounceMs > 0 && request.trigger !== 'invoke' && !speculative) {
+        await this.clock.sleep(debounceMs);
+        if (this.isCancelled(requestId, token, speculative, requestGeneration)) {
+          this.dependencies.onSavedRequest?.('debounced');
+          return { type: 'cancelled', reason: 'cancelled during request debounce' };
+        }
+      }
       let networkChoices: readonly GhostTextModelChoice[];
       try {
         const candidateCount =

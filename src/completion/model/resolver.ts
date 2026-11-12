@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { usageStats } from '../stats';
 import { Agent, ProxyAgent, fetch as undiciFetch, type Dispatcher } from 'undici';
 import * as vscode from 'vscode';
 import {
@@ -349,6 +350,7 @@ function readStreamingEvent(event: SseEvent): { readonly done: boolean; readonly
     throw invalidResponse();
   }
   checkResponseError(value);
+  if ('usage' in value) usageStats.recordUsage(value.usage);
   if (!Array.isArray(value.choices)) {
     if ('usage' in value) return { done: false, text: '' };
     throw invalidResponse();
@@ -532,6 +534,7 @@ class EndpointCompletionModel implements CompletionModel {
     const network = this.createNetwork(readProxySettings());
     const scope = createRequestScope(token, settings.timeoutMs, network);
     let streaming = false;
+    usageStats.recordRequest();
     try {
       const response = await scope.run(async () => {
         const result = await network.fetch(
@@ -573,6 +576,7 @@ class EndpointCompletionModel implements CompletionModel {
       }
       if (fim) {
         const value = await scope.run(() => response.json());
+        if (isRecord(value)) usageStats.recordUsage(value.usage);
         const choices = readChoices(value, chat).map((choice) => ({
           ...choice,
           text: chat
@@ -588,7 +592,9 @@ class EndpointCompletionModel implements CompletionModel {
         };
       }
       if (response.headers.get('content-type')?.toLowerCase().includes('application/json')) {
-        const choices = readChoices(await scope.run(() => response.json()), true);
+        const json: unknown = await scope.run(() => response.json());
+        if (isRecord(json)) usageStats.recordUsage(json.usage);
+        const choices = readChoices(json, true);
         return {
           kind: request.kind,
           text: (async function* () {
